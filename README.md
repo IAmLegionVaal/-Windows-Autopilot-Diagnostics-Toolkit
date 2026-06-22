@@ -110,6 +110,8 @@ Double-click:
 Launch_Autopilot_Recovery.bat
 ```
 
-## Validation
+## Validation status
 
-The scripts have been source-reviewed for Windows PowerShell 5.1. Test them on an Entra-joined Intune-managed lab device, a workgroup device and a device with failed enrolment events before production use.
+Tested successfully by the author on his own Windows machines in his available Autopilot, Entra ID and Intune environments. The documented diagnostic, service, scheduled-task, PRT, DNS and log-archive workflows worked as intended on those systems.
+
+Results may vary with the Windows edition and build, device join state, Intune enrolment type, tenant policy, assigned applications and scripts, scheduled-task names, permissions, network access and user-specific identity state. Successful author testing does not guarantee identical behaviour in every tenant, so use `-DryRun` and validate on a non-critical managed device before broader deployment.
