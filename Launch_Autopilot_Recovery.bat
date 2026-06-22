@@ -1,6 +1,7 @@
 @echo off
 setlocal
 cd /d "%~dp0"
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "Unblock-File -LiteralPath '%~dp0src\Invoke-AutopilotSafeRecovery.ps1' -ErrorAction SilentlyContinue"
 
 :menu
 cls
@@ -19,20 +20,50 @@ echo   0. Exit
 echo ============================================================
 set /p CHOICE=Select an option: 
 
-if "%CHOICE%"=="1" set ARGS=&goto run
-if "%CHOICE%"=="2" set ARGS=-RepairAllSafe&goto run
-if "%CHOICE%"=="3" set ARGS=-RestartIntuneManagementExtension&goto run
-if "%CHOICE%"=="4" set ARGS=-RestartMdmServices&goto run
-if "%CHOICE%"=="5" set ARGS=-TriggerMdmSync&goto run
-if "%CHOICE%"=="6" set ARGS=-RefreshPrimaryRefreshToken&goto run
-if "%CHOICE%"=="7" set ARGS=-FlushDns&goto run
-if "%CHOICE%"=="8" set ARGS=-ArchiveIntuneLogs&goto run
+if "%CHOICE%"=="1" goto diagnose
+if "%CHOICE%"=="2" goto safe
+if "%CHOICE%"=="3" goto ime
+if "%CHOICE%"=="4" goto mdm
+if "%CHOICE%"=="5" goto sync
+if "%CHOICE%"=="6" goto prt
+if "%CHOICE%"=="7" goto dns
+if "%CHOICE%"=="8" goto archive
 if "%CHOICE%"=="0" goto end
 goto menu
 
-:run
-powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "Unblock-File -LiteralPath '%~dp0src\Invoke-AutopilotSafeRecovery.ps1' -ErrorAction SilentlyContinue"
-powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0src\Invoke-AutopilotSafeRecovery.ps1" %ARGS%
+:diagnose
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0src\Invoke-AutopilotSafeRecovery.ps1"
+goto complete
+
+:safe
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0src\Invoke-AutopilotSafeRecovery.ps1" -RepairAllSafe
+goto complete
+
+:ime
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0src\Invoke-AutopilotSafeRecovery.ps1" -RestartIntuneManagementExtension
+goto complete
+
+:mdm
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0src\Invoke-AutopilotSafeRecovery.ps1" -RestartMdmServices
+goto complete
+
+:sync
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0src\Invoke-AutopilotSafeRecovery.ps1" -TriggerMdmSync
+goto complete
+
+:prt
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0src\Invoke-AutopilotSafeRecovery.ps1" -RefreshPrimaryRefreshToken
+goto complete
+
+:dns
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0src\Invoke-AutopilotSafeRecovery.ps1" -FlushDns
+goto complete
+
+:archive
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0src\Invoke-AutopilotSafeRecovery.ps1" -ArchiveIntuneLogs
+goto complete
+
+:complete
 echo.
 pause
 goto menu
